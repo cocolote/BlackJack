@@ -1,3 +1,4 @@
+require 'pry'
 class Hand
   attr_reader :cards
 
@@ -6,15 +7,28 @@ class Hand
   end
 
   def score
-    ranks = get_ranks(self).sort
-    num_ranks = get_score(ranks)
+    num_ranks = get_score(get_ranks(self).sort)
   end
 
+  def show_hand
+    @cards.map{ |card| card.show_card }.join(" ")
+  end
+
+  def add(card)
+    @cards << card
+  end
+
+private
   def get_ranks(hand)
     @cards.map{ |card| card.rank }
   end
 
   def get_score(ranks)
+    if ranks.include?("A")
+      aces = ranks.grep("A")
+      ranks.delete("A")
+      (ranks << aces).flatten!
+    end
     ranks.inject(0) do |sum, rank|
       case true
       when rank == "J" || rank == "Q" || rank == "K"
@@ -28,13 +42,5 @@ class Hand
       else sum + rank.to_i
       end
     end
-  end
-
-  def show_hand
-    @cards.map{ |card| card.show_card }.join(" ")
-  end
-
-  def add(card)
-    @cards << card
   end
 end

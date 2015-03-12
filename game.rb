@@ -12,6 +12,11 @@ class Game
     while true
       puts "\n#{@player} hand: #{@hand.show_hand}"
       puts "#{@player} score: #{@hand.score}"
+      if @hand.score > 21
+        puts "Bust! Game over.."
+        score = 0
+        break
+      end
       if @player != "Computer"
         print "\nHit or Stand?(H/S): "; option = gets.chomp.upcase
       else
@@ -21,11 +26,6 @@ class Game
       case option
       when "H"
         @hand.add(@bjdeck.draw!)
-        if @hand.score > 21
-          puts "Bust! Game over.."
-          score = 0
-          break
-        end
       when "S"
         score = @hand.score
         break
